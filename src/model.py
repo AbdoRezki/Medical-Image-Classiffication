@@ -35,16 +35,21 @@ def create_model(model_name='resnet50', img_size=(224, 224), trainable_base=Fals
     model = models.Sequential([
         base_model,
         layers.GlobalAveragePooling2D(),
+        layers.BatchNormalization(),
+        layers.Dense(512, activation='relu'),
+        layers.Dropout(0.6),  # Increased from 0.5
+        layers.BatchNormalization(),
         layers.Dense(256, activation='relu'),
-        layers.Dropout(0.5),
+        layers.Dropout(0.5),  # Increased from 0.3
+        layers.BatchNormalization(),
         layers.Dense(128, activation='relu'),
-        layers.Dropout(0.3),
+        layers.Dropout(0.4),
         layers.Dense(1, activation='sigmoid')
     ], name=f'{model_name}_pneumonia_detector')
     
-    # Compile model
+    # Compile model with lower learning rate
     model.compile(
-        optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+        optimizer=tf.keras.optimizers.Adam(learning_rate=0.00005),  # Lower from 0.0001
         loss='binary_crossentropy',
         metrics=[
             'accuracy',

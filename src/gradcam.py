@@ -1,8 +1,3 @@
-"""
-Grad-CAM (Gradient-weighted Class Activation Mapping) implementation
-Optimized for transfer learning models (ResNet50, EfficientNet, etc.)
-"""
-
 import numpy as np
 import tensorflow as tf
 import cv2
@@ -11,20 +6,7 @@ from keras.models import Model
 
 
 class GradCAM:
-    """
-    Grad-CAM implementation for visualizing CNN decisions
-    Works with transfer learning models
-    """
-    
     def __init__(self, model, layer_name=None):
-        """
-        Initialize Grad-CAM
-        
-        Args:
-            model: Trained Keras model
-            layer_name: Name of the convolutional layer to visualize.
-                       If None, uses the last convolutional layer
-        """
         self.model = model
         self.layer_name = layer_name or self._find_target_layer()
         
@@ -32,8 +14,6 @@ class GradCAM:
         self.grad_model = self._build_grad_model()
     
     def _find_target_layer(self):
-        """Find the best layer for Grad-CAM visualization"""
-        
         # Common last conv layer names for popular architectures
         target_layers = [
             'conv5_block3_out',    # ResNet50
@@ -75,8 +55,6 @@ class GradCAM:
         raise ValueError("Could not find suitable convolutional layer for Grad-CAM")
     
     def _build_grad_model(self):
-        """Build a model that outputs both conv layer and predictions"""
-        
         # Find the base model if it exists
         base_model = None
         for layer in self.model.layers:
@@ -110,17 +88,6 @@ class GradCAM:
             raise ValueError(f"Could not build gradient model for layer: {self.layer_name}")
     
     def compute_heatmap(self, image, pred_index=None):
-        """
-        Compute Grad-CAM heatmap
-        
-        Args:
-            image: Input image (preprocessed, with batch dimension)
-            pred_index: Class index to compute gradients for.
-                       If None, uses the predicted class
-                       
-        Returns:
-            np.ndarray: Heatmap as numpy array
-        """
         # Record operations for automatic differentiation
         with tf.GradientTape() as tape:
             # Get convolutional layer output and predictions
@@ -151,18 +118,6 @@ class GradCAM:
         return heatmap.numpy()
     
     def overlay_heatmap(self, heatmap, image, alpha=0.4, colormap=cv2.COLORMAP_JET):
-        """
-        Overlay heatmap on original image
-        
-        Args:
-            heatmap: Grad-CAM heatmap
-            image: Original image (H, W, C)
-            alpha: Transparency of heatmap overlay
-            colormap: OpenCV colormap to use
-            
-        Returns:
-            np.ndarray: Image with heatmap overlay
-        """
         # Resize heatmap to match image size
         heatmap = cv2.resize(heatmap, (image.shape[1], image.shape[0]))
         
@@ -183,14 +138,6 @@ class GradCAM:
         return superimposed
     
     def visualize(self, image, original_image=None, save_path=None):
-        """
-        Generate and visualize Grad-CAM
-        
-        Args:
-            image: Preprocessed image (with batch dimension)
-            original_image: Original image for overlay (without preprocessing)
-            save_path: Path to save visualization
-        """
         # Compute heatmap
         heatmap = self.compute_heatmap(image)
         

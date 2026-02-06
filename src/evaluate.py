@@ -16,15 +16,6 @@ from data_loader import ChestXrayDataLoader
 
 
 def plot_confusion_matrix(y_true, y_pred, class_names, save_path=None):
-    """
-    Plot confusion matrix
-    
-    Args:
-        y_true: True labels
-        y_pred: Predicted labels
-        class_names: List of class names
-        save_path: Path to save plot
-    """
     cm = confusion_matrix(y_true, y_pred)
     
     plt.figure(figsize=(8, 6))
@@ -48,14 +39,6 @@ def plot_confusion_matrix(y_true, y_pred, class_names, save_path=None):
 
 
 def plot_roc_curve(y_true, y_pred_proba, save_path=None):
-    """
-    Plot ROC curve
-    
-    Args:
-        y_true: True labels
-        y_pred_proba: Predicted probabilities
-        save_path: Path to save plot
-    """
     fpr, tpr, _ = roc_curve(y_true, y_pred_proba)
     roc_auc = auc(fpr, tpr)
     
@@ -80,14 +63,6 @@ def plot_roc_curve(y_true, y_pred_proba, save_path=None):
 
 
 def plot_precision_recall_curve(y_true, y_pred_proba, save_path=None):
-    """
-    Plot Precision-Recall curve
-    
-    Args:
-        y_true: True labels
-        y_pred_proba: Predicted probabilities
-        save_path: Path to save plot
-    """
     precision, recall, _ = precision_recall_curve(y_true, y_pred_proba)
     
     plt.figure(figsize=(8, 6))
@@ -105,12 +80,6 @@ def plot_precision_recall_curve(y_true, y_pred_proba, save_path=None):
 
 
 def evaluate_model(args):
-    """
-    Evaluate trained model on test set
-    
-    Args:
-        args: Command-line arguments
-    """
     print("=" * 80)
     print("MODEL EVALUATION")
     print("=" * 80)

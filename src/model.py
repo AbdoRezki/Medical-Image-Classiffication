@@ -1,24 +1,9 @@
-"""
-Deep learning model architectures for pneumonia detection
-"""
-
 import tensorflow as tf
 from keras import layers, models
 from keras.applications import ResNet50, EfficientNetB0, VGG16
 
 
 def create_model(model_name='resnet50', img_size=(224, 224), trainable_base=False):
-    """
-    Create a transfer learning model for binary classification
-    
-    Args:
-        model_name: Name of the base model ('resnet50', 'efficientnetb0', 'vgg16')
-        img_size: Input image size (height, width)
-        trainable_base: Whether to train the base model layers
-        
-    Returns:
-        tf.keras.Model: Compiled model ready for training
-    """
     input_shape = (*img_size, 3)
     
     # Select base model
@@ -78,15 +63,6 @@ def create_model(model_name='resnet50', img_size=(224, 224), trainable_base=Fals
 
 
 def create_custom_cnn(img_size=(224, 224)):
-    """
-    Create a custom CNN from scratch (for comparison)
-    
-    Args:
-        img_size: Input image size (height, width)
-        
-    Returns:
-        tf.keras.Model: Compiled model
-    """
     input_shape = (*img_size, 3)
     
     model = models.Sequential([
@@ -148,15 +124,6 @@ def create_custom_cnn(img_size=(224, 224)):
 
 
 def get_callbacks(model_path='../models/best_model.h5'):
-    """
-    Create training callbacks
-    
-    Args:
-        model_path: Path to save best model
-        
-    Returns:
-        list: List of Keras callbacks
-    """
     callbacks = [
         # Save best model
         tf.keras.callbacks.ModelCheckpoint(
